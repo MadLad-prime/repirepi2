@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Playground & Synapse</title> <!-- Updated Title -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-logo">
+                <a href="#">AIPsyche</a>
+            </div>
+            <div class="nav-scroll-wrapper"> <!-- Wrapper for scroll visual cues -->
+                <ul class="nav-menu">
+                    <!-- *** Add many placeholders - 30 Total *** -->
+                    <li class="nav-item"><a href="#models" class="nav-link">Core Models</a></li>
+                    <li class="nav-item"><a href="#blog" class="nav-link">Blog Central</a></li>
+                    <li class="nav-item"><a href="#animations" class="nav-link">Gen Art</a></li>
+                    <li class="nav-item"><a href="#tools" class="nav-link">Utility Tools</a></li>
+                    <li class="nav-item"><a href="#thoughts" class="nav-link">Synapses</a></li>
+                    <li class="nav-item"><a href="#section6" class="nav-link">NLP Insights</a></li>
+                    <li class="nav-item"><a href="#section7" class="nav-link">Computer Vision</a></li>
+                    <li class="nav-item"><a href="#section8" class="nav-link">Reinforcement</a></li>
+                    <li class="nav-item"><a href="#section9" class="nav-link">Explainable AI</a></li>
+                    <li class="nav-item"><a href="#section10" class="nav-link">Ethical AI</a></li>
+                    <li class="nav-item"><a href="#section11" class="nav-link">GANs Showcase</a></li>
+                    <li class="nav-item"><a href="#section12" class="nav-link">Transformers</a></li>
+                    <li class="nav-item"><a href="#section13" class="nav-link">Data Viz</a></li>
+                    <li class="nav-item"><a href="#section14" class="nav-link">Backend Tech</a></li>
+                    <li class="nav-item"><a href="#section15" class="nav-link">Frontend Magic</a></li>
+                    <li class="nav-item"><a href="#section16" class="nav-link">Deployment</a></li>
+                    <li class="nav-item"><a href="#section17" class="nav-link">Python Deep Dive</a></li>
+                    <li class="nav-item"><a href="#section18" class="nav-link">JS Experiments</a></li>
+                    <li class="nav-item"><a href="#section19" class="nav-link">Research Papers</a></li>
+                    <li class="nav-item"><a href="#section20" class="nav-link">Cool Datasets</a></li>
+                    <li class="nav-item"><a href="#section21" class="nav-link">Competitions</a></li>
+                    <li class="nav-item"><a href="#section22" class="nav-link">Learning Paths</a></li>
+                    <li class="nav-item"><a href="#section23" class="nav-link">Hardware Chat</a></li>
+                    <li class="nav-item"><a href="#section24" class="nav-link">Sci-Fi Corner</a></li>
+                    <li class="nav-item"><a href="#section25" class="nav-link">Creative Prompts</a></li>
+                    <li class="nav-item"><a href="#section26" class="nav-link">Music & AI</a></li>
+                    <li class="nav-item"><a href="#section27" class="nav-link">Abstract Theory</a></li>
+                    <li class="nav-item"><a href="#section28" class="nav-link">Failures & Fun</a></li>
+                    <li class="nav-item"><a href="#section29" class="nav-link">Resource Links</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">Contact Me</a></li>
+                    <!-- Note: Manage links & corresponding sections appropriately! -->
+                </ul>
+            </div>
+            <button class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+             <!-- Added subtle background element -->
+            <div class="hero-background-overlay"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <!-- Slight change for effect -->
+                    <span>Exploring</span>
+                    <span>the</span>
+                    <span>Digital</span>
+                    <span>Mind</span>
+                </h1>
+                <p class="hero-subtitle">A personal journey through AI models, code, and creative sparks.</p>
+                <a href="#models" class="cta-button">Discover Models</a>
+            </div>
+            <canvas id="particle-canvas" class="particle-background"></canvas>
+        </section>
+
+        <!-- Latest Blog Section (Example: Added unique ID for potential specific styling) -->
+        <section id="blog" class="content-section blog-section">
+            <h2 class="section-title">Latest from the Blog</h2>
+            <div class="card-container">
+                <!-- Blog Post Cards (Same structure, CSS handles appearance) -->
+                <article class="card blog-card">
+                     <img src="placeholder-blog1.jpg" alt="Blog post image" class="card-image">
+                     <div class="card-content"> <h3 class="card-title">Understanding Transformer Networks</h3> <p class="card-excerpt">A deep dive into the architecture powering many modern NLP models...</p><a href="#" class="card-link">Read More <span class="arrow">→</span></a> </div>
+                 </article>
+                <article class="card blog-card"> <img src="placeholder-blog2.jpg" alt="Blog post image" class="card-image"> <div class="card-content"> <h3 class="card-title">Building a GAN From Scratch</h3> <p class="card-excerpt">Journey through generative adversarial networks and creating synthetic images...</p><a href="#" class="card-link">Read More <span class="arrow">→</span></a> </div> </article>
+                 <article class="card blog-card"> <img src="placeholder-blog3.jpg" alt="Blog post image" class="card-image"> <div class="card-content"> <h3 class="card-title">The Ethics of AI Development</h3> <p class="card-excerpt">Navigating the complex moral landscape of artificial intelligence...</p><a href="#" class="card-link">Read More <span class="arrow">→</span></a> </div> </article>
+            </div>
+             <div class="section-link-container">
+                <a href="/blog-archive" class="section-link">View All Posts</a>
+             </div>
+        </section>
+
+         <!-- Featured Models Section -->
+        <section id="models" class="content-section featured-models">
+            <h2 class="section-title">Featured AI Models</h2>
+             <p class="section-subtitle">Interactive Demos & Explorations</p>
+            <div class="card-container">
+                <article class="card model-card"> <div class="model-icon">🧠</div> <div class="card-content"> <h3 class="card-title">Simple Text Generator</h3> <p class="card-excerpt">A basic character-level RNN trained on classic literature.</p><a href="/models/text-generator" class="card-link">Try It Out <span class="arrow">→</span></a> </div> </article>
+                 <article class="card model-card"> <div class="model-icon">🎨</div> <div class="card-content"> <h3 class="card-title">Image Style Transfer</h3> <p class="card-excerpt">Apply the style of famous paintings to your own photos.</p><a href="/models/style-transfer" class="card-link">Try It Out <span class="arrow">→</span></a> </div> </article>
+                 <article class="card model-card"> <div class="model-icon">💬</div> <div class="card-content"> <h3 class="card-title">Sentiment Analysis</h3> <p class="card-excerpt">Analyze the emotional tone of a piece of text.</p><a href="/models/sentiment" class="card-link">Try It Out <span class="arrow">→</span></a> </div> </article>
+            </div>
+             <div class="section-link-container">
+                 <a href="/models-gallery" class="section-link">Explore All Models</a>
+             </div>
+        </section>
+
+        <!-- Random Thoughts Section -->
+        <section id="thoughts" class="content-section thoughts-section">
+            <h2 class="section-title">Synapse Firing</h2> <!-- Renamed for flair -->
+             <div class="thought-bubble"> <p>"What if we could train models not just on data, but on the *process* of discovery itself? Could AI develop genuine curiosity?"</p> <span class="thought-timestamp">- Just Now</span> </div>
+              <div class="thought-bubble"> <p>"The elegance of a simple algorithm often outweighs the brute force of a complex one. Finding that balance is the art."</p> <span class="thought-timestamp">- Yesterday</span> </div>
+              <div class="thought-bubble"> <p>"Error messages are just the model's way of asking for clarification... or complaining about the data."</p> <span class="thought-timestamp">- 3 Days Ago</span> </div>
+             <!-- Add more thoughts -->
+        </section>
+
+        <!-- Animations Section -->
+         <section id="animations" class="content-section animations-section">
+             <h2 class="section-title">Generative Art & Visuals</h2>
+             <p class="section-subtitle">Code-driven creativity and interactive sketches.</p>
+              <div class="placeholder-container">
+                <div class="placeholder-item">
+                    <div class="placeholder-icon">✨</div>
+                    <p>Abstract Particle System</p>
+                    <span>Coming Soon</span>
+                </div>
+                <div class="placeholder-item">
+                     <div class="placeholder-icon">🌀</div>
+                    <p>Flow Field Simulation</p>
+                    <span>Coming Soon</span>
+                 </div>
+                 <div class="placeholder-item">
+                     <div class="placeholder-icon">🎨</div>
+                     <p>AI-Generated Patterns</p>
+                     <span>Requires Backend</span>
+                 </div>
+            </div>
+         </section>
+
+        <!-- Tools Section -->
+         <section id="tools" class="content-section tools-section">
+             <h2 class="section-title">Helpful Tools & Resources</h2>
+             <p class="section-subtitle">Curated links for developers and AI enthusiasts.</p>
+             <ul class="tool-list">
+                <li><a href="https://playground.tensorflow.org/" target="_blank" rel="noopener noreferrer">TensorFlow Playground <span>(External)</span></a></li>
+                <li><a href="https://teachablemachine.withgoogle.com/" target="_blank" rel="noopener noreferrer">Teachable Machine <span>(External)</span></a></li>
+                <li><a href="#" target="_blank">Placeholder: Awesome Dataset Link</a></li>
+                <li><a href="#" target="_blank">Placeholder: Model Visualizer Tool</a></li>
+                <li><a href="#" target="_blank">Placeholder: AI Ethics Checklist</a></li>
+             </ul>
+         </section>
+
+         <!-- Placeholder for one of the many added nav items -->
+          <section id="section17" class="content-section placeholder-section">
+             <h2 class="section-title">Python Deep Dive (Placeholder)</h2>
+              <p class="section-subtitle">Future home of in-depth Python tutorials for AI.</p>
+             <div class="placeholder-content">Content for Section 17 will go here...</div>
+         </section>
+
+         <!-- Contact section merged into footer -->
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="main-footer"> <!-- Added ID for contact link -->
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3 class="footer-title">AIPsyche</h3>
+                <p>Personal experiments in the realm of AI, code, and creative synthesis.</p>
+                 <p>Building bridges between algorithms and artistry.</p>
+            </div>
+            <div class="footer-section quick-links"> <!-- Changed class name slightly -->
+                <h3 class="footer-title">Navigate</h3>
+                <ul>
+                     <li><a href="#hero">Top</a></li>
+                    <li><a href="#models">Models</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#thoughts">Synapses</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section connect"> <!-- Changed class name slightly -->
+                <h3 class="footer-title">Connect</h3>
+                <p>Reach out:</p>
+                <p><a href="mailto:youremail@example.com" class="footer-email">youremail@example.com</a></p>
+                <div class="social-links">
+                     <!-- Placeholder for actual SVG Icons -->
+                    <a href="#" target="_blank" title="GitHub"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.5 2.3.96 2.87.73c.08-.57.34-.96.6-1.18c-2.22-.25-4.55-1.11-4.55-4.92c0-.95.32-1.74.89-2.35c-.09-.25-.39-1.11.08-2.31c0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8a9.56 9.56 0 0 1 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.47 1.2.17 2.06.08 2.31c.57.61.89 1.4.89 2.35c0 3.81-2.33 4.67-4.55 4.92c.36.31.69.92.69 1.85V21c0 .27.16.58.66.5C19.13 20.17 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg></a>
+                    <a href="#" target="_blank" title="LinkedIn"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-3.06V18.5h3.06v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h3.07Z M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77Z"/></svg></a>
+                    <a href="#" target="_blank" title="Twitter/X"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26l8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                     <!-- Add other relevant socials -->
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © <span id="current-year"></span> AIPsyche | Synthesis in Pixels and Code
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
