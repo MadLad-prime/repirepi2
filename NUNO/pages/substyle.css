@@ -1,0 +1,260 @@
+/* --- subpage-catalog.css --- */
+
+/* --- Core Variables & Resets --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    /* Reimagined Palette - More contrast, focused accents */
+    --bg-deep-space: #0a0a0f;      /* Almost black */
+    --bg-station-panel: #14141c;  /* Dark gray for panels/cards */
+    --bg-control-surface: #1f1f2b;/* Slightly lighter interaction surface */
+    --text-nebula-white: #e8e8f5;  /* Slightly cool off-white */
+    --text-data-stream: #9a9aaf;  /* Muted gray for secondary text */
+    --accent-primary-glow: #00f2ff; /* Vibrant Cyan */
+    --accent-secondary-core: #a040ff; /* Rich Purple */
+    --accent-tertiary-alert: #ff3d80; /* Bright Pink */
+    --border-subtle-grid: rgba(200, 200, 220, 0.1); /* Very subtle lines */
+    --border-active-circuit: var(--accent-primary-glow);
+    --glow-primary: rgba(0, 242, 255, 0.6);
+    --glow-secondary: rgba(160, 64, 255, 0.5);
+    --shadow-ambient: rgba(0, 0, 0, 0.4);
+    --shadow-focused: rgba(0, 0, 0, 0.6);
+
+    --font-primary: 'Poppins', sans-serif;
+    --font-headings: 'Orbitron', sans-serif; /* Keeping Orbitron for that sci-fi feel */
+
+    --transition-interface: 300ms cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+    --transition-quick: 150ms ease-out;
+    --border-radius-sharp: 4px; /* Sharper edges */
+    --border-radius-smooth: 8px;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--bg-deep-space);
+    color: var(--text-nebula-white);
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    /* Subtle grid lines or starfield effect */
+    background-image:
+        linear-gradient(to right, var(--border-subtle-grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border-subtle-grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* --- Custom Scrollbar (Optional but nice) --- */
+body::-webkit-scrollbar { width: 8px; }
+body::-webkit-scrollbar-track { background: var(--bg-station-panel); }
+body::-webkit-scrollbar-thumb {
+    background-color: var(--accent-secondary-core);
+    border-radius: 10px;
+    border: 2px solid var(--bg-station-panel);
+}
+body::-webkit-scrollbar-thumb:hover { background-color: var(--accent-primary-glow); }
+
+/* --- Page Wrapper & Main Content --- */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.catalog-main {
+    flex-grow: 1; /* Pushes footer down */
+    width: 100%;
+}
+
+.catalog-section {
+    max-width: 1400px; /* Wider container for grid */
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem); /* Responsive padding */
+}
+
+/* --- Catalog Header --- */
+.catalog-header {
+    text-align: center;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+    position: relative;
+}
+
+/* Animated Title Underline */
+.catalog-header::after {
+    content: '';
+    position: absolute;
+    bottom: -15px; /* Position below the subtitle */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-primary-glow), var(--accent-secondary-core));
+    border-radius: 3px;
+    box-shadow: 0 0 15px var(--glow-primary);
+    opacity: 0.8;
+}
+
+.catalog-title {
+    font-family: var(--font-headings);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    color: var(--text-nebula-white);
+    text-shadow: 0 0 10px var(--glow-primary), 0 0 20px var(--glow-primary); /* Title glow */
+}
+
+.catalog-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--text-data-stream);
+    max-width: 600px;
+    margin: 0 auto; /* Center if text wraps */
+}
+
+/* --- Model Grid --- */
+.model-grid {
+    display: grid;
+    /* More flexible grid, aims for ~320px but can stretch */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+    gap: clamp(1.5rem, 4vw, 2.5rem); /* Responsive gap */
+}
+
+/* --- Model Card Styling --- */
+.model-card {
+    background-color: var(--bg-station-panel);
+    border-radius: var(--border-radius-smooth);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-subtle-grid);
+    box-shadow: 0 4px 15px var(--shadow-ambient);
+    transition:
+        transform var(--transition-interface),
+        box-shadow var(--transition-interface),
+        border-color var(--transition-interface);
+    position: relative; /* Needed for pseudo-elements */
+    cursor: pointer; /* Indicate interactivity */
+    outline: none; /* Remove default focus outline, we'll add our own */
+}
+
+/* Card Accent Border - Subtle initially */
+.model-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px; /* Top border only */
+    background: linear-gradient(90deg, transparent, var(--accent-primary-glow), transparent);
+    opacity: 0;
+    transform: scaleX(0.5);
+    transition: opacity var(--transition-interface), transform var(--transition-interface);
+    z-index: 2;
+}
+
+/* Hover & Focus State */
+.model-card:hover,
+.model-card:focus-visible { /* Style focus like hover for keyboard nav */
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 10px 30px var(--shadow-focused);
+    border-color: var(--accent-primary-glow); /* Highlight border */
+}
+
+.model-card:hover::before,
+.model-card:focus-visible::before {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* Content Inside Card */
+.card-content {
+    padding: clamp(1.25rem, 5vw, 1.75rem); /* Responsive padding */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* For potential overlays if needed */
+    z-index: 1;
+    background: var(--bg-station-panel); /* Ensure content bg matches */
+}
+
+.card-title {
+    font-family: var(--font-headings);
+    font-size: clamp(1.15rem, 4vw, 1.4rem);
+    margin-bottom: 0.6rem;
+    color: var(--text-nebula-white);
+    font-weight: 600;
+}
+
+.card-excerpt {
+    color: var(--text-data-stream);
+    font-size: 0.95rem;
+    flex-grow: 1; /* Push link down */
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+}
+
+.card-link {
+    color: var(--accent-primary-glow);
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    align-self: flex-start; /* Don't stretch */
+    margin-top: auto; /* Push to bottom */
+    padding: 0.4rem 0; /* Clickable area */
+    transition: color var(--transition-quick), letter-spacing var(--transition-quick);
+    position: relative;
+}
+
+.card-link .arrow {
+    display: inline-block;
+    margin-left: 0.4em;
+    transition: transform var(--transition-quick);
+}
+
+.card-link:hover,
+.model-card:hover .card-link, /* Enhance link color when card is hovered */
+.model-card:focus-visible .card-link {
+    color: #fff; /* Brighten link */
+    letter-spacing: 1.5px;
+}
+
+.card-link:hover .arrow,
+.model-card:hover .card-link .arrow,
+.model-card:focus-visible .card-link .arrow {
+    transform: translateX(5px);
+}
+
+/* Optional: Placeholder for icon if you add one */
+.model-icon {
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 2.5rem;
+    color: var(--accent-secondary-core);
+    background: var(--bg-control-surface);
+    border-bottom: 1px solid var(--border-subtle-grid);
+}
+
+/* --- Footer --- */
+.page-footer {
+    text-align: center;
+    padding: 1.5rem clamp(1rem, 5vw, 3rem);
+    margin-top: 4rem; /* Space above footer */
+    color: var(--text-data-stream);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border-subtle-grid);
+    background-color: var(--bg-station-panel); /* Match card bg */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .catalog-title {
+        font-size: clamp(2rem, 8vw, 2.8rem); /* Slightly smaller on mobile */
+    }
+    .catalog-subtitle {
+         font-size: clamp(0.9rem, 3vw, 1.1rem);
+    }
+     /* Stack grid items sooner if needed */
+     .model-grid {
+         /* grid-template-columns: 1fr; */ /* Uncomment for single column */
+         gap: 1.5rem;
+     }
+}
