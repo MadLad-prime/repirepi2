@@ -1,9 +1,540 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ...existing styles from index.html... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Model Nexus - Catalog</title>
+    <!-- Link to your existing CSS file -->
+    <link rel="stylesheet" href="substyle.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons (Optional but recommended) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- Basic Page Styles (Suggestions - Adapt/Move to substyle.css) --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f7f6; /* Lighter background for less gloom */
+            color: #333;
+            margin: 0; /* Remove default body margin */
+        }
+
+        .page-wrapper {
+            max-width: 1200px;
+            margin: 0 auto; /* Center content */
+            padding: 20px;
+        }
+
+        .catalog-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #e9ecef; /* Subtle header background */
+            border-radius: 8px;
+        }
+
+        .catalog-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #2c3e50; /* Dark blue-grey */
+            margin-bottom: 0.5rem;
+        }
+
+        .catalog-subtitle {
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        .model-grid {
+            display: grid;
+            /* Responsive grid: 1 col on small, 2 on medium, 3 on large */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px; /* Space between cards */
+        }
+
+        .model-card {
+            background-color: #fff;
+            border-radius: 10px; /* Rounded corners for cards */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            overflow: hidden; /* Ensure content respects border-radius */
+            display: flex; /* Use flex for card content alignment */
+            flex-direction: column; /* Stack content vertically */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover transition */
+            cursor: pointer; /* Indicate clickable */
+        }
+
+        .model-card:hover,
+        .model-card:focus-within { /* Add focus state for accessibility */
+            transform: translateY(-5px) scale(1.02); /* Lift effect */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        /* Optional Icon Styling */
+        .model-icon {
+            text-align: center;
+            padding: 15px 0 5px 0;
+            font-size: 2.5em;
+            color: #3498db; /* Example icon color */
+        }
+
+        .card-content {
+            padding: 20px;
+            flex-grow: 1; /* Allow content to fill available space */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+            color: #333;
+        }
+
+        .card-excerpt {
+            color: #555;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            flex-grow: 1; /* Push link to the bottom */
+        }
+
+        .card-link {
+            display: inline-block; /* Correct link display */
+            text-decoration: none;
+            color: #3498db; /* Accent color */
+            font-weight: 600;
+            transition: color 0.3s ease;
+            margin-top: auto; /* Push link to bottom */
+        }
+
+        .card-link .arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .card-link:hover {
+            color: #2980b9; /* Darker shade on hover */
+        }
+
+        .card-link:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        .page-footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9em;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* --- Modal Styles --- */
+        .blog-modal {
+            position: fixed;
+            inset: 0; /* Replaces top/left/width/height */
+            background: rgba(0, 0, 0, 0.7); /* Darker overlay */
+            display: flex; /* Use flex for centering */
+            justify-content: center;
+            align-items: center;
+            opacity: 0; /* Start hidden */
+            visibility: hidden; /* Start hidden for accessibility */
+            transition: opacity 0.4s ease, visibility 0s linear 0.4s; /* Fade transition */
+            z-index: 1000; /* Ensure it's on top */
+            padding: 20px; /* Add padding for smaller screens */
+        }
+
+        .blog-modal.visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.4s ease;
+        }
+
+        .blog-modal-content {
+            background: #36454F; /* Charcoal Slate Grey */
+            color: #f0f0f0; /* Light text for contrast */
+            padding: 35px; /* More padding */
+            border-radius: 15px; /* Rounded edges */
+            max-width: 700px; /* Max width */
+            width: 100%; /* Responsive width */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Softer shadow */
+            position: relative; /* For positioning the close button */
+            max-height: 85vh; /* Limit height and enable scroll */
+            overflow-y: auto; /* Add scroll if content exceeds height */
+            transform: scale(0.95); /* Slight scale down effect */
+            transition: transform 0.4s ease; /* Transition for scale */
+        }
+
+        .blog-modal.visible .blog-modal-content {
+            transform: scale(1); /* Scale back to normal when visible */
+        }
+
+        .blog-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em; /* Larger close button */
+            font-weight: bold;
+            color: #aaa; /* Lighter grey */
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.3s ease;
+            background: none; /* Remove potential button background */
+            border: none; /* Remove potential button border */
+            padding: 0; /* Remove potential button padding */
+        }
+
+        .blog-modal-close:hover {
+            color: #fff; /* White on hover */
+        }
+
+        /* Style content inside the modal for better readability */
+        #blogModalContent h2,
+        #blogModalContent h3,
+        #blogModalContent h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #e0e0e0; /* Slightly lighter headings */
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        #blogModalContent h2 { font-size: 1.8em; }
+        #blogModalContent h3 { font-size: 1.5em; }
+        #blogModalContent h4 { font-size: 1.2em; }
+
+        #blogModalContent p {
+            line-height: 1.7;
+            margin-bottom: 1em;
+        }
+        #blogModalContent a {
+            color: #5dade2; /* Light blue links */
+            text-decoration: none;
+        }
+        #blogModalContent a:hover {
+            text-decoration: underline;
+        }
+        #blogModalContent code {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        #blogModalContent pre {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        #blogModalContent ul,
+        #blogModalContent ol {
+            margin-left: 20px;
+            margin-bottom: 1em;
+        }
+        #blogModalContent li {
+            margin-bottom: 0.5em;
+        }
+
+    </style>
 </head>
 <body>
-    <!-- Blank body -->
+    <!-- Main wrapper for potential distinct background/layout -->
+    <div class="page-wrapper">
+        <main class="catalog-main">
+            <section class="catalog-section">
+                <header class="catalog-header">
+                    <h1 class="catalog-title">AI Model Nexus</h1>
+                    <p class="catalog-subtitle">Explore the latest advancements in Artificial Intelligence</p>
+                </header>
+
+                <div class="model-grid">
+                    <!-- Card 1 -->
+                    <article class="model-card" id="card-QuantumLeap-v3" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                        <div class="model-icon"><i class="fa-solid fa-brain"></i></div> <!-- Example Icon -->
+                        <div class="card-content">
+                            <h3 class="card-title">QuantumLeap v3</h3>
+                            <p class="card-excerpt">Next-gen NLP model with context-aware reasoning capabilities.</p>
+                            <a href="#" class="card-link" aria-label="Learn more about QuantumLeap v3" role="button">
+                                <span>Explore Details</span> <span class="arrow">→</span>
+                            </a>
+                            <!-- Hidden blog post for QuantumLeap v3 -->
+                            <div class="blog-post" style="display: none;">
+                               <h2>Deep Dive: QuantumLeap v3</h2>
+                               <p>QuantumLeap v3 represents a significant step forward in Natural Language Processing. Built upon a novel transformer architecture, it excels in understanding nuanced context and performing complex reasoning tasks.</p>
+                               <h3>Key Features:</h3>
+                               <ul>
+                                   <li>Enhanced context window (up to 128k tokens)</li>
+                                   <li>Improved multi-lingual support</li>
+                                   <li>State-of-the-art performance on reasoning benchmarks (e.g., LAMBADA, SuperGLUE)</li>
+                                   <li>Reduced computational footprint compared to v2</li>
+                               </ul>
+                               <h4>Use Cases:</h4>
+                               <p>Ideal for advanced chatbots, sophisticated text summarization, code generation assistance, and complex Q&A systems.</p>
+                               <pre><code class="language-python">
+# Example pseudo-code usage
+import quantum_leap as ql
+
+model = ql.load('v3')
+context = "The report details market trends..."
+query = "Summarize the key financial risks mentioned."
+summary = model.summarize(context, query, max_length=100)
+print(summary)
+                               </code></pre>
+                               <p>Further development focuses on few-shot learning capabilities and integration with knowledge graphs.</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="model-card" id="card-Visionary-Prime" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                         <div class="model-icon"><i class="fa-solid fa-eye"></i></div> <!-- Example Icon -->
+                        <div class="card-content">
+                            <h3 class="card-title">Visionary Prime</h3>
+                            <p class="card-excerpt">High-resolution image generation and analysis suite.</p>
+                            <a href="#" class="card-link" aria-label="Learn more about Visionary Prime" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                            <div class="blog-post" style="display: none;">
+                                <h2>Visionary Prime: Seeing the Unseen</h2>
+                                <p>Content about Visionary Prime would go here. Explain its capabilities in image generation (e.g., text-to-image, image editing) and analysis (object detection, segmentation).</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="model-card" id="card-CodeSynth-Alpha" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                         <div class="model-icon"><i class="fa-solid fa-code"></i></div> <!-- Example Icon -->
+                        <div class="card-content">
+                            <h3 class="card-title">CodeSynth Alpha</h3>
+                            <p class="card-excerpt">AI-powered code generation and debugging assistant.</p>
+                            <a href="#" class="card-link" aria-label="Learn more about CodeSynth Alpha" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                            <div class="blog-post" style="display: none;">
+                                <h2>CodeSynth Alpha: Your AI Coding Partner</h2>
+                                <p>Details about CodeSynth Alpha. Mention supported languages, features like code completion, bug detection, unit test generation, etc.</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 4 -->
+                    <article class="model-card" id="card-AudioWeave" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                        <div class="model-icon"><i class="fa-solid fa-waveform"></i></div> <!-- Example Icon -->
+                         <div class="card-content">
+                            <h3 class="card-title">AudioWeave</h3>
+                            <p class="card-excerpt">Real-time audio synthesis and voice cloning technology.</p>
+                            <a href="#" class="card-link" aria-label="Learn more about AudioWeave" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                            <div class="blog-post" style="display: none;">
+                                <h2>AudioWeave: The Sound of AI</h2>
+                                <p>Information about AudioWeave. Cover text-to-speech quality, voice cloning ethics and capabilities, music generation potential.</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 5 -->
+                     <article class="model-card" id="card-PredictivePulse" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                         <div class="model-icon"><i class="fa-solid fa-chart-line"></i></div> <!-- Example Icon -->
+                         <div class="card-content">
+                            <h3 class="card-title">PredictivePulse</h3>
+                            <p class="card-excerpt">Time-series forecasting model for financial markets.</p>
+                            <a href="#" class="card-link" aria-label="Learn more about PredictivePulse" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                            <div class="blog-post" style="display: none;">
+                               <h2>PredictivePulse: Forecasting the Future</h2>
+                               <p>Content about PredictivePulse. Discuss its underlying models (e.g., LSTM, Transformers for time series), accuracy metrics, and applications beyond finance.</p>
+                           </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 6: BioSimulate X -->
+                    <article class="model-card" id="card-BioSimulate-X" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                        <div class="model-icon"><i class="fa-solid fa-dna"></i></div> <!-- Example Icon -->
+                        <div class="card-content">
+                           <h3 class="card-title">BioSimulate X</h3>
+                           <p class="card-excerpt">Advanced molecular simulation for drug discovery.</p>
+                           <a href="#" class="card-link" aria-label="Learn more about BioSimulate X" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                           <div class="blog-post" style="display: none;">
+                               <h2>BioSimulate X: Accelerating Discovery</h2>
+                               <p>Details on BioSimulate X. How it models protein folding, molecular docking, etc. Impact on research speed.</p>
+                           </div>
+                       </div>
+                   </article>
+
+                   <!-- Card 7: RoboMind Core -->
+                    <article class="model-card" id="card-RoboMind-Core" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                        <div class="model-icon"><i class="fa-solid fa-robot"></i></div> <!-- Example Icon -->
+                        <div class="card-content">
+                           <h3 class="card-title">RoboMind Core</h3>
+                           <p class="card-excerpt">Control systems and pathfinding AI for robotics.</p>
+                           <a href="#" class="card-link" aria-label="Learn more about RoboMind Core" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                           <div class="blog-post" style="display: none;">
+                               <h2>RoboMind Core: Intelligent Movement</h2>
+                               <p>Explain RoboMind Core's algorithms (e.g., reinforcement learning for control, A* for pathfinding) and its applications in autonomous systems.</p>
+                            </div>
+                       </div>
+                   </article>
+
+                   <!-- Card 8: StoryWeaver AI -->
+                    <article class="model-card" id="card-StoryWeaver-AI" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                        <div class="model-icon"><i class="fa-solid fa-feather-pointed"></i></div> <!-- Example Icon -->
+                        <div class="card-content">
+                           <h3 class="card-title">StoryWeaver AI</h3>
+                           <p class="card-excerpt">Generative AI for interactive narrative creation.</p>
+                           <a href="#" class="card-link" aria-label="Learn more about StoryWeaver AI" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                           <div class="blog-post" style="display: none;">
+                               <h2>StoryWeaver AI: Crafting Worlds</h2>
+                               <p>Discuss StoryWeaver AI. How it generates plot points, characters, dialogue. Use cases in gaming, education, creative writing.</p>
+                           </div>
+                       </div>
+                   </article>
+
+                   <!-- Card 9: ThreatScanner Zeta -->
+                    <article class="model-card" id="card-ThreatScanner-Zeta" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                         <div class="model-icon"><i class="fa-solid fa-shield-halved"></i></div> <!-- Example Icon -->
+                        <div class="card-content">
+                           <h3 class="card-title">ThreatScanner Zeta</h3>
+                           <p class="card-excerpt">Cybersecurity AI for anomaly detection networks.</p>
+                           <a href="#" class="card-link" aria-label="Learn more about ThreatScanner Zeta" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                           <div class="blog-post" style="display: none;">
+                               <h2>ThreatScanner Zeta: Proactive Defense</h2>
+                               <p>Detail ThreatScanner Zeta. Explain its approach to detecting intrusions, malware behavior, and network anomalies. Importance in modern cybersecurity.</p>
+                           </div>
+                       </div>
+                   </article>
+
+                   <!-- Card 10: CustomFlow AI -->
+                    <article class="model-card" id="card-CustomFlow-AI" tabindex="0" aria-haspopup="dialog" aria-controls="blogModal">
+                         <div class="model-icon"><i class="fa-solid fa-diagram-project"></i></div> <!-- Example Icon -->
+                        <div class="card-content">
+                           <h3 class="card-title">CustomFlow AI</h3>
+                           <p class="card-excerpt">Build custom AI workflows with visual tools.</p>
+                           <a href="#" class="card-link" aria-label="Learn more about CustomFlow AI" role="button"><span>Explore Details</span> <span class="arrow">→</span></a>
+                           <div class="blog-post" style="display: none;">
+                               <h2>CustomFlow AI: Your Workflow, Your AI</h2>
+                               <p>Explain CustomFlow AI. How users can chain models, preprocess data, and build bespoke AI solutions without extensive coding. Target audience (developers, data scientists, businesses).</p>
+                           </div>
+                       </div>
+                   </article>
+
+                </div> <!-- End model-grid -->
+            </section>
+        </main>
+
+        <!-- Modal container -->
+        <div id="blogModal" class="blog-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+           <div class="blog-modal-content">
+               <!-- Use a button for the close element for better accessibility -->
+              <button class="blog-modal-close" aria-label="Close modal">×</button>
+              <!-- Content will be injected here -->
+              <div id="blogModalContent">
+                  <!-- Adding hidden elements for aria-describedby -->
+                  <h2 id="modalTitle" style="display: none;">Model Details</h2>
+                  <p id="modalDescription" style="display: none;">Detailed information about the selected AI model.</p>
+              </div>
+           </div>
+        </div>
+
+        <footer class="page-footer">
+            <p>© 2024 AI Model Nexus. Advancing Intelligence, Responsibly.</p>
+        </footer>
+    </div> <!-- End page-wrapper -->
+
+    <!-- JavaScript for modal behavior -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const modal = document.getElementById('blogModal');
+          const modalContent = document.getElementById('blogModalContent');
+          const modalCloseButton = modal.querySelector('.blog-modal-close');
+          const cards = document.querySelectorAll('.model-card');
+          let previouslyFocusedElement = null; // To store focus before opening modal
+
+          // Function to open the modal
+          function openModal(contentHTML) {
+              // Store the element that triggered the modal
+              previouslyFocusedElement = document.activeElement;
+
+              // Inject content (keeping the hidden aria labels)
+              const titleElement = modalContent.querySelector('#modalTitle');
+              const descElement = modalContent.querySelector('#modalDescription');
+              modalContent.innerHTML = ''; // Clear previous content
+              modalContent.appendChild(titleElement); // Re-append aria label elements
+              modalContent.appendChild(descElement);
+              modalContent.insertAdjacentHTML('beforeend', contentHTML); // Add new content
+
+              // Make modal visible
+              modal.classList.add('visible');
+              document.body.style.overflow = 'hidden'; // Prevent background scrolling
+
+              // Update dynamic Aria title if possible (extract first H2/H3)
+              const dynamicTitle = modalContent.querySelector('h2, h3');
+               if (dynamicTitle) {
+                   titleElement.textContent = dynamicTitle.textContent;
+               } else {
+                  titleElement.textContent = "Model Details"; // Fallback
+               }
+
+               // Focus the close button initially
+              modalCloseButton.focus();
+          }
+
+          // Function to close the modal
+          function closeModal() {
+              modal.classList.remove('visible');
+              document.body.style.overflow = ''; // Restore background scrolling
+
+              // Return focus to the element that opened the modal
+              if (previouslyFocusedElement) {
+                  previouslyFocusedElement.focus();
+                  previouslyFocusedElement = null; // Clear reference
+              }
+          }
+
+          // Add click listener to each card
+          cards.forEach(card => {
+              card.addEventListener('click', function(event) {
+                  // Prevent link navigation if user clicks the link itself inside the card
+                  if (event.target.closest('.card-link')) {
+                     // Allow link default behavior maybe? Or handle separately?
+                     // For now, let's assume clicking anywhere on the card opens the modal.
+                     // If you want the link to go somewhere else, add logic here.
+                     event.preventDefault(); // Stop link navigation if we want modal always
+                  }
+
+                  const postContent = this.querySelector('.blog-post');
+                  if (postContent && postContent.innerHTML.trim() !== "") {
+                      openModal(postContent.innerHTML);
+                  } else {
+                      // Optional: Handle case where blog post content is missing
+                      console.warn('No blog post content found for this card:', this.id);
+                      // You could open the modal with a default message:
+                      // openModal('<p>Details for this model are coming soon!</p>');
+                  }
+              });
+
+              // Add keydown listener for Enter/Space key activation (Accessibility)
+              card.addEventListener('keydown', function(event) {
+                 if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault(); // Prevent scrolling on spacebar
+                    this.click(); // Trigger the click handler
+                 }
+              });
+          });
+
+          // Add click listener to close button
+          modalCloseButton.addEventListener('click', closeModal);
+
+          // Add click listener to modal background (to close)
+          modal.addEventListener('click', function(event) {
+              // Close only if clicking directly on the modal overlay (not the content)
+              if (event.target === modal) {
+                  closeModal();
+              }
+          });
+
+          // Add keyboard listener for Escape key
+          document.addEventListener('keydown', function(event) {
+              if (event.key === 'Escape' && modal.classList.contains('visible')) {
+                  closeModal();
+              }
+          });
+      });
+    </script>
 </body>
 </html>
