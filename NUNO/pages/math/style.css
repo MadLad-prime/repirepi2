@@ -1,0 +1,426 @@
+/* --- Global Styles & Variables --- */
+:root {
+    /* Blueprint Theme Colors */
+    --bp-bg: #e8f1f2; /* Light blueprint paper */
+    --bp-line: #a2b6bd; /* Faded grid lines */
+    --bp-ink: #0d47a1; /* Dark blue ink */
+    --bp-pencil: #546e7a; /* Pencil sketch lines */
+    --bp-highlight: #fff59d; /* Highlighter yellow */
+    --bp-overlay-bg: rgba(40, 53, 147, 0.9); /* Indigo overlay */
+    --bp-overlay-text: #e0e0e0;
+    --bp-overlay-header: #ffffff;
+    --bp-link: #90caf9;
+    --bp-link-hover: #ffffff;
+
+    /* Cosmic Theme Colors (Example - Define if used) */
+    --cs-bg: #0f0f1a;
+    --cs-line: rgba(100, 100, 150, 0.3);
+    --cs-ink: #e0e0ff;
+    --cs-pencil: #8888aa;
+    --cs-highlight: #ffcc00;
+    --cs-overlay-bg: rgba(20, 20, 40, 0.95);
+    --cs-overlay-text: #c0c0e0;
+    /* ... etc ... */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden; /* Prevent scroll bars from main body */
+    color: var(--text-color, #333);
+    background-color: var(--bg-color, var(--bp-bg)); /* Default to blueprint bg */
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Architects Daughter', cursive; /* Sketchy font for headers */
+    color: var(--header-color, var(--bp-ink));
+    margin-bottom: 0.75em;
+}
+
+a {
+    color: var(--link-color, var(--bp-link));
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--link-hover-color, var(--bp-link-hover));
+    text-decoration: underline;
+}
+
+pre, code {
+    font-family: monospace;
+    background-color: var(--code-bg, rgba(0, 0, 0, 0.05));
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+pre {
+    padding: 1em;
+    overflow-x: auto;
+    background-color: var(--pre-bg, rgba(0, 0, 0, 0.07));
+    border: 1px dashed var(--border-color, var(--bp-pencil)); /* Sketchy border */
+    margin: 1em 0;
+}
+
+
+/* --- Canvas & Container --- */
+#canvas-container {
+    position: fixed;
+    inset: 0;
+    background-color: var(--bg-color, var(--bp-bg));
+    /* Add subtle background pattern (optional) */
+    background-image:
+        linear-gradient(var(--line-color, var(--bp-line)) 1px, transparent 1px),
+        linear-gradient(to right, var(--line-color, var(--bp-line)) 1px, transparent 1px);
+    background-size: 20px 20px; /* Grid size */
+    z-index: 1;
+    cursor: grab;
+}
+#canvas-container:active {
+    cursor: grabbing;
+}
+
+
+/* --- Concept Overlay Panel --- */
+#concept-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: clamp(320px, 40%, 600px); /* Responsive width */
+    background-color: var(--overlay-bg, var(--bp-overlay-bg));
+    color: var(--overlay-text-color, var(--bp-overlay-text));
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth slide */
+    z-index: 100;
+    display: flex; /* Use flex for content alignment */
+    flex-direction: column;
+    border-left: 5px solid var(--accent-color, var(--bp-ink)); /* Accent border */
+}
+
+#concept-overlay.visible {
+    transform: translateX(0%);
+}
+
+#close-overlay-btn {
+    position: absolute;
+    top: 10px;
+    left: -50px; /* Position outside the panel */
+    background: var(--overlay-bg, var(--bp-overlay-bg));
+    color: var(--overlay-text-color, var(--bp-overlay-text));
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px 0 0 5px;
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-left: 3px solid var(--accent-color, var(--bp-ink));
+    border-top: 3px solid var(--accent-color, var(--bp-ink));
+    border-bottom: 3px solid var(--accent-color, var(--bp-ink));
+
+}
+#close-overlay-btn:hover {
+     background: var(--accent-color, var(--bp-ink));
+     color: var(--bg-color, var(--bp-bg));
+}
+
+
+.overlay-content {
+    padding: 30px;
+    overflow-y: auto; /* Enable scrolling for content */
+    flex-grow: 1; /* Allow content to fill space */
+}
+
+.overlay-content h2 { /* Main Concept Title */
+    font-size: 2em;
+    margin-bottom: 1em;
+    color: var(--overlay-header-color, var(--bp-overlay-header));
+    border-bottom: 2px dashed var(--overlay-line-color, var(--bp-pencil));
+    padding-bottom: 0.3em;
+    display: inline-block; /* Fit border to text */
+}
+
+.overlay-section {
+    margin-bottom: 2.5em;
+    padding-bottom: 1em;
+    border-bottom: 1px dashed var(--overlay-line-color, var(--bp-pencil));
+}
+.overlay-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.overlay-section h3 {
+    font-size: 1.3em;
+    margin-bottom: 0.8em;
+    color: var(--overlay-subheader-color, var(--bp-overlay-header));
+}
+.overlay-section h3 i { /* Icons in section headers */
+    margin-right: 10px;
+    color: var(--accent-color, var(--bp-link));
+}
+
+/* Specific section styles */
+.my-take p {
+    font-family: 'Architects Daughter', cursive; /* Hand-written feel */
+    font-size: 1.1em;
+    line-height: 1.7;
+    color: var(--my-take-text, #fff);
+    background-color: var(--my-take-bg, rgba(255, 245, 157, 0.1)); /* Faint yellow highlight */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px dashed var(--bp-pencil);
+}
+
+#visualization-container, #tool-container {
+    min-height: 150px; /* Ensure space is reserved */
+    background-color: var(--interactive-bg, rgba(0, 0, 0, 0.1));
+    border-radius: 5px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--border-color, var(--bp-pencil));
+    color: var(--placeholder-text, var(--bp-pencil)); /* Style placeholder text */
+}
+/* Add specific styles if using p5 canvas etc. */
+#visualization-container canvas {
+   max-width: 100%;
+   height: auto;
+}
+
+.connections ul, .resources ul {
+    list-style: none;
+    padding-left: 0;
+}
+.connections li, .resources li {
+    margin-bottom: 0.5em;
+}
+.connections a, .resources a {
+     display: inline-block; /* Allow padding */
+     padding: 3px 0;
+     color: var(--link-color, var(--bp-link));
+     position: relative; /* For pseudo-elements */
+}
+/* Add little 'go to' arrow */
+.connections a::after {
+    content: ' →';
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    margin-left: 5px;
+}
+.connections a:hover::after {
+    opacity: 1;
+}
+
+.resources i { /* Icon before resource link */
+    margin-right: 8px;
+    width: 1.2em; /* Align text */
+}
+
+/* MathJax specific styling (adjust as needed) */
+.mjx-chtml { /* Target rendered MathJax SVG/HTML */
+   color: var(--math-color, var(--bp-overlay-text)) !important; /* Force color */
+   font-size: 1.1em !important; /* Make math slightly larger */
+}
+
+
+/* --- Search & Theme Controls --- */
+.search-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 101;
+    background: var(--control-bg, var(--bp-overlay-bg));
+    padding: 8px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+     border: 1px solid var(--accent-color, var(--bp-ink));
+}
+#search-input {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 3px 0 0 3px;
+    background: var(--input-bg, var(--bp-bg));
+    color: var(--input-text, var(--bp-ink));
+    min-width: 200px;
+    font-family: 'Poppins', sans-serif;
+}
+#search-btn {
+    padding: 8px 12px;
+    border: none;
+    background: var(--button-bg, var(--bp-ink));
+    color: var(--button-text, var(--bp-bg));
+    cursor: pointer;
+    border-radius: 0 3px 3px 0;
+    transition: background-color 0.3s ease;
+}
+#search-btn:hover {
+    background: var(--button-hover-bg, #0a369d); /* Darker blue */
+}
+
+
+#theme-switcher-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 101;
+    padding: 10px 15px;
+    background: var(--control-bg, var(--bp-overlay-bg));
+    color: var(--button-text, var(--bp-overlay-text));
+    border: 1px solid var(--accent-color, var(--bp-ink));
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+#theme-switcher-btn i {
+    margin-right: 8px;
+}
+#theme-switcher-btn:hover {
+    background: var(--accent-color, var(--bp-ink));
+    color: var(--bg-color, var(--bp-bg));
+}
+
+/* --- Blueprint Theme Specifics --- */
+.theme-blueprint {
+    --bg-color: var(--bp-bg);
+    --line-color: var(--bp-line);
+    --text-color: var(--bp-pencil);
+    --header-color: var(--bp-ink);
+    --link-color: var(--bp-ink);
+    --link-hover-color: #0d47a1; /* Slightly darker blue */
+    --accent-color: var(--bp-ink);
+    --overlay-bg: var(--bp-overlay-bg);
+    --overlay-text-color: var(--bp-overlay-text);
+    --overlay-header-color: var(--bp-overlay-header);
+    --overlay-line-color: var(--bp-line); /* Dashed lines in overlay */
+    --math-color: var(--bp-overlay-text);
+    --interactive-bg: rgba(0,0,0,0.05);
+    --placeholder-text: var(--bp-pencil);
+    --control-bg: #fff; /* Controls have white background */
+    --button-bg: var(--bp-ink);
+    --button-text: #fff;
+    --button-hover-bg: #0a369d;
+    --input-bg: #fff;
+    --input-text: var(--bp-ink);
+
+     /* Add other specific blueprint styles here */
+}
+
+
+/* --- Cosmic Theme Specifics (Define these properly if you add the theme) --- */
+.theme-cosmic {
+    --bg-color: #0f0f1a;
+    --line-color: rgba(100, 100, 150, 0.2); /* Faint nebula lines */
+    --text-color: #a0a0c0; /* Light lavender */
+    --header-color: #e0e0ff; /* Brighter header */
+    --link-color: #87CEFA; /* Light sky blue links */
+    --link-hover-color: #ffffff;
+    --accent-color: #FFD700; /* Gold accent */
+    --overlay-bg: rgba(20, 20, 40, 0.95); /* Deep space */
+    --overlay-text-color: #c0c0e0;
+    --overlay-header-color: #ffffff;
+    --overlay-line-color: rgba(100, 100, 150, 0.5); /* Dim lines */
+    --math-color: #e0e0ff;
+    --interactive-bg: rgba(255, 255, 255, 0.05);
+    --placeholder-text: #6a6a8a;
+    --control-bg: rgba(30, 30, 50, 0.9);
+    --button-bg: var(--accent-color);
+    --button-text: #0f0f1a;
+    --button-hover-bg: #FFEC8B; /* Lighter gold */
+    --input-bg: #202030;
+    --input-text: #e0e0ff;
+
+    /* Cosmic specific backgrounds, node styles via JS */
+     background-image: none; /* Override grid for space theme maybe? Or use JS */
+
+}
+
+/* --- Utility --- */
+.hidden {
+    display: none;
+}
+
+/* ... (keep existing styles) ... */
+
+/* --- Control Grouping & Subject Navigation --- */
+.control-cluster {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 101;
+    display: flex;
+    flex-direction: column; /* Stack search and nav */
+    gap: 10px; /* Space between controls */
+    background: var(--control-bg, rgba(255,255,255,0.8)); /* Shared background */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+     border: 1px solid var(--accent-color, var(--bp-ink));
+}
+
+.search-container {
+     /* Remove fixed positioning and background if inside control-cluster */
+     /* position: static; */
+     box-shadow: none;
+     padding: 0;
+     border: none;
+     display: flex; /* Keep internal layout */
+     background: none;
+}
+
+.subject-nav-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    gap: 8px; /* Space between buttons */
+}
+
+.subject-nav-button { /* Style the generated buttons */
+    padding: 6px 12px;
+    border: none;
+    background: var(--button-bg, var(--bp-ink));
+    color: var(--button-text, var(--bp-bg));
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.subject-nav-button:hover {
+    background: var(--button-hover-bg, #0a369d);
+    transform: translateY(-1px);
+}
+
+/* --- Style cross-subject links in overlay --- */
+#connections-list a[style*="bold"] { /* Target links styled bold by JS */
+   color: var(--cross-subject-link-color, #FFD700); /* Gold or other highlight */
+}
+#connections-list a[style*="bold"]:hover {
+    color: var(--cross-subject-link-hover-color, #FFFACD); /* Lighter gold */
+}
+
+/* --- Adjust Theme Switcher position maybe --- */
+#theme-switcher-btn {
+    /* position: fixed; */ /* Already fixed */
+    bottom: 20px;
+    /* right: 20px; */ /* Move if needed */
+    /* left: auto; */
+    left: 20px; /* Keep bottom left for now */
+    /* ... rest of styles ... */
+}
